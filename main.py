@@ -2,25 +2,9 @@ import telebot
 from dotenv import load_dotenv
 import os
 import datetime
-from flask import Flask, request
 load_dotenv()
 
 bot = telebot.TeleBot(token=os.getenv("TOKEN"), parse_mode=None)
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "Bot is running!"
-
-@app.route('/' + os.getenv("WEBHOOK_PATH"), methods=['POST'])
-def webhook():
-    json_str = request.get_data().decode('UTF-8')
-    update = telebot.types.Update.de_json(json_str)
-    bot.process_new_updates([update])
-    return "OK", 200
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
 
 @bot.message_handler(["start"])
 def send_messege(message):
